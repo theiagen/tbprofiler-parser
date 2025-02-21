@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import CheckInputs
+import os
 from __init__ import __VERSION__
 from Parser import Parser 
 
@@ -31,7 +32,7 @@ def main():
   qc_arguments.add_argument("-f", "--min_frequency",
                       help="the minimum frequency for a mutation to pass QC (0.1 -> 10%%)\ndefault=0.1", default=0.1, metavar="\b", type=float)
   qc_arguments.add_argument("-r", "--coverage_regions",
-                      help="the BED file containing the regions to calculate percent coverage for\ndefault=data/tbdb-modified-regions.bed", default="../data/tbdb-modified-regions.bed", metavar="\b", type=CheckInputs.is_bed_valid)
+                      help="the BED file containing the regions to calculate percent coverage for\ndefault=data/tbdb-modified-regions.bed", default=f"{os.path.dirname(os.path.realpath(__file__))}/../data/tbdb-modified-regions.bed", metavar="\b", type=CheckInputs.is_bed_valid)
   
   general_arguments = parser.add_argument_group("text arguments", 
                                                 "arguments that are used verbatim in the reports or to name the output files")
@@ -51,7 +52,7 @@ def main():
   tngs_arguments.add_argument("--tngs",
                       help="\nindicates that the input data was generated using Deeplex + CDPH modified protocol\nTurns on tNGS-specific global parameters", action="store_true", default=False)
   tngs_arguments.add_argument("--tngs_expert_regions",
-                      help="the BED file containing the regions to calculate coverage for expert rule regions\n  (used to determine coverage quality in the regions where resistance-conferring\n  mutations are found, or where a CDC expert rule is applied; not for QC)\ndefault=data/tngs-expert-rule-regions.bed", default="../data/tngs-expert-rule-regions.bed", metavar="\b", type=CheckInputs.is_bed_valid)
+                      help="the BED file containing the regions to calculate coverage for expert rule regions\n  (used to determine coverage quality in the regions where resistance-conferring\n  mutations are found, or where a CDC expert rule is applied; not for QC)\ndefault=data/tngs-expert-rule-regions.bed", default=f"{os.path.dirname(os.path.realpath(__file__))}/../data/tngs-expert-rule-regions.bed", metavar="\b", type=CheckInputs.is_bed_valid)
   tngs_arguments.add_argument("--rrs_frequency",
                       help="the minimum frequency for an rrs mutation to pass QC\n  (rrs has several problematic sites in the Deeplex tNGS assay)\ndefault=0.1", default=0.1, metavar="\b", type=float)
   tngs_arguments.add_argument("--rrs_read_support",

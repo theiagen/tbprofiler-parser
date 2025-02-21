@@ -38,6 +38,15 @@ class Parser:
     globals_.ETHA237_FREQUENCY = options.etha237_frequency
     globals_.OPERATOR = options.operator
 
+    if self.verbose:
+      self.logger.setLevel(logging.INFO)
+      self.logger.info("PARSER:Verbose mode enabled")
+    else:
+      self.logger.setLevel(logging.ERROR)
+    if self.debug:
+      self.logger.setLevel(logging.DEBUG)
+      self.logger.debug("PARSER:Debug mode enabled")
+
     if self.tngs:
       self.logger.info("PARSER:tNGS flag detected; adjusting outputs to reflect this")
       if (self.coverage_regions == "../data/tbdb-modified-regions.bed"):
@@ -69,16 +78,6 @@ class Parser:
     if self.config != "":
       self.logger.info("PARSER:Overwriting variables with the provided config file")
       self.overwrite_variables()
-
-    if self.verbose:
-      self.logger.setLevel(logging.INFO)
-      self.logger.info("PARSER:Verbose mode enabled")
-    else:
-      self.logger.setLevel(logging.ERROR)
-      
-    if self.debug:
-      self.logger.setLevel(logging.DEBUG)
-      self.logger.debug("PARSER:Debug mode enabled")
       
   def overwrite_variables(self):
     """This function overwrites the input variables provided at runtime with those from the config file"""
@@ -88,10 +87,10 @@ class Parser:
       for key, value in settings.items():
         if key.replace("self.", "") in vars(self):
           setattr(self, key.replace("self.", ""), value)
-          self.logger.debug("PARSER:self.{} has been overwritten with a config-specified value".format(key))
+          self.logger.info("PARSER:self.{} has been overwritten with a config-specified value".format(key))
         if key.replace("globals.", "") in dir(globals_):
           setattr(globals_, key.replace("globals.", ""), value) 
-          self.logger.debug("PARSER:globals.{} has been overwritten with a config-specified value".format(key))
+          self.logger.info("PARSER:globals.{} has been overwritten with a config-specified value".format(key))
   
   def check_dependency_exists(self):
     """This function confirms that samtools is installed and available"""
